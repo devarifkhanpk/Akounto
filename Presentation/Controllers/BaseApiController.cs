@@ -1,7 +1,5 @@
 ﻿using Akounto.Billing.Gateways;
 using Akounto.Billing.Gateways.StripePayment;
-using Akounto.Billing.Gateways.StripePayment.Person;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Akounto.Billing.Presentation.Controllers
