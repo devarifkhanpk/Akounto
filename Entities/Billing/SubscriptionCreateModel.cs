@@ -7,7 +7,7 @@ namespace Akounto.Billing.Entities.Billing
 {
     public class SubscriptionCreateModel //: Stripe.SubscriptionCreateOptions
     { 
-
+         
         public string Customer { get; set; }
 
         public string PlanID { get; set; }
