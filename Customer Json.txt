@@ -1,0 +1,31 @@
+{
+  "id": 0,
+  "shipping": {
+    "address": {
+      "city": "Lahore",
+      "country": "Pakistan",
+      "line1": "Lahore",
+      "line2": "",
+      "postalCode": "54000",
+      "state": "Punjab"
+    },
+    "name": "Mubeen2",
+    "phone": "03354132886"
+  },
+  "phone": "03354132886", 
+  "name": "Mubeen2",
+  "email": "mubeen2@example.com",  
+  "balance": 100,
+  "address": {
+    "city": "Lahore",
+    "country": "Pakistan",
+    "line1": "Lahore",
+    "line2": "",
+    "postalCode": "54000",
+    "state": "Punjab"
+  }
+}
+
+Get Customer
+--------------------------------------------------
+cus_MkeDcyfEbP5V4t

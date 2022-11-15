@@ -1,0 +1,36 @@
+{
+  "paymentBehavior": "string",
+  "onBehalfOf": "string",
+  "offSession": true,
+  "items": [
+    {
+      "billingThresholds": {
+        "usageGte": 0
+      },
+      "clearUsage": true,
+      "deleted": true,
+      "id": "string",
+      "price": "price_1M02S7SEUqurWPXSVu4B8xZS",
+      "quantity": 1,
+      "taxRates": [
+        "string"
+      ]
+    }
+  ],
+  "description": "string",
+  "trialFromPlan": true,
+  "defaultSource": "string",
+  "daysUntilDue": 0,
+  "customer": "cus_MkeDcyfEbP5V4t",
+  "currency": "PKR",
+  "automaticTax": {
+    "enabled": true
+  },
+  "applicationFeePercent": 0,
+  "defaultPaymentMethod": "string",
+  "trialPeriodDays": 0
+}
+
+GET Subsctiption
+--------------------------------------------------------------
+sub_1M1D7ySEUqurWPXSxSOcLIt9
