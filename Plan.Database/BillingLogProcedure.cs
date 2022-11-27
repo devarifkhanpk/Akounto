@@ -25,16 +25,16 @@ namespace Plan.Database
                     {
                         connection.Open();
                         command.Connection = connection;
-                        command.CommandText = "[dbo].(AddTransactionLog]";
+                        command.CommandText = "[dbo].[AddTransactionLog]";
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandTimeout = 3600;
                         command.Parameters.AddWithValue("@TransactionLogTypeId", _log.TransactionLogTypeId);
                         command.Parameters.AddWithValue("@CompanyId", _log.CompanyId);
-                        command.Parameters.AddWithValue("planId", _log.PlanId);
-                        command.Parameters.AddWithValue("planCategoryId", _log.PlanCategoryId);
-                        command.Parameters.AddWithValue("paymentGatewayTypeIda", _log.PaymentGatewayTypeId);
-                        command.Parameters.AddWithValue("paymentGatewayTransactionId", _log.PaymentGatewayTransactionId);
-                        command.Parameters.AddWithValue("pescription", _log.Description);
+                        command.Parameters.AddWithValue("@PlanId", _log.PlanId);
+                        command.Parameters.AddWithValue("@PlanCategoryId", _log.PlanCategoryId);
+                        command.Parameters.AddWithValue("@PaymentGatewayTypeId", _log.PaymentGatewayTypeId);
+                        command.Parameters.AddWithValue("@PaymentGatewayTransactionId", _log.PaymentGatewayTransactionId);
+                        command.Parameters.AddWithValue("@Description", _log.Description);
                         command.Parameters.AddWithValue("@Amount", _log.Amount);
 
                         sqlDataAdapter = new SqlDataAdapter(command);
