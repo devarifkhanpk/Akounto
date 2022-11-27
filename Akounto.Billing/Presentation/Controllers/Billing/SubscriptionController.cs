@@ -6,6 +6,12 @@ namespace Akounto.Billing.Presentation.Controllers.Billing
 {
     public class SubscriptionController : BaseController
     {
+        [HttpGet(nameof(Index))]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         [HttpPost(nameof(Add))]
         public ActionResult Add(string plan)
         {

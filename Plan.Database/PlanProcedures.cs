@@ -2,7 +2,8 @@
 
 namespace Plan.Database
 {
-    public class Class1
+    public class PlanProcedures
     {
+
     }
 }
