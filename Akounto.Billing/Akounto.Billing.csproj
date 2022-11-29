@@ -29,5 +29,9 @@
     <ProjectReference Include="..\Plans.Payment\Plans.Payment.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Customer\" />
+  </ItemGroup>
+
 
 </Project>
