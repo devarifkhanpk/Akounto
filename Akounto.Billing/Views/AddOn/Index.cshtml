@@ -1,0 +1,145 @@
+﻿@*@model Plans.Payment.Entities.Billing.AddOnModel*@
+@model IEnumerable<Plans.Payment.Entities.Billing.AddOnModel>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var addOns = (List<Plans.Payment.Entities.Billing.AddOnModel>)ViewData["resultData"]; // Cast the list
+}
+<table width="100%" id="tblAddons">
+    <thead>
+        <tr>
+            <td><p>Plan Detail</p>
+            <td colspan="5"></td>
+
+        </tr>
+        <tr>
+            <td colspan="5"><hr /></td>
+
+        </tr>
+        <tr>
+            <td width="30%">Select Plan</td>
+            <td width="15%"></td>
+            <td width="20%">Quantity</td>
+            <td width="5%">Unit Price</td>
+            <td width="30%">Cost</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{int i = 0;}
+        @foreach (var element in addOns)
+        {
+            <tr>
+                <td width="30%" class="pnm">@element.Description</td>
+                <td width="15%"></td>
+                <td width="20%">@Html.TextBox("qty", "", new { @class = "qty" })</td>
+                <td width="5%">
+                    @Html.TextBox("price", element.Cost.ToString(), new { @class = "price", style = "width:50px" })
+                </td>
+                <td width="30%">
+                    @Html.TextBox("subtot", "0", new { @class = "subtot" })
+                                      
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="5"><hr /></td>
+        </tr>      
+       
+    </tbody>
+    <tfoot>
+        <tr style="border-block:solid">
+            <td colspan="2"></td>
+            <td width="10%"></td>
+            <td>Amount to be Period</td>
+            <td>
+                @*<input type="text" class="grdtot" value="" name="" />*@
+                @Html.TextBox("grdtot", "", new { @class = "grdtot" })
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+
+
+
+<script language="javascript">
+    //        $('#txtQty').change(function(){
+    //            alert(this.value);
+
+    //});
+    //$(function () {
+    //    $('[id*=txtQty]').on("change", function () {
+    //        var grid = document.getElementById("tblAddons");
+    //        var rows = grid.getElementsByTagName("TR");
+    //        var amount = 0;
+    //        for (var i = 1; i < rows.length; i++) {
+    //            var cells = rows[i].getElementsByTagName("TD");
+    //            amount += parseFloat(cells[2].val());
+    //        }
+    //        //$('[id*=txtSum]').val(amount);
+    //        alert(amount);
+    //    });
+    //});
+  /*  $(document).ready(function () {*/
+
+        //iterate through each textboxes and add keyup
+        //handler to trigger sum event
+        //$(".txt").each(function () {
+
+        //    $(this).change(function () {
+        //        calculateSum();
+        //    });
+        //});
+
+        $(function () {
+            $('.pnm, .price, .subtot, .grdtot').prop('readonly', true);
+            var $tblrows = $("#tblAddons tbody tr");
+
+            $tblrows.each(function (index) {
+                var $tblrow = $(this);
+
+                $tblrow.find('.qty').on('change', function () {
+
+                    var qty = $tblrow.find("[name=qty]").val();
+                   // var price = $tblrow.find("[name=price]").val();
+                    var price = $tblrow.find("[name=price]").val();
+                    var subTotal = parseInt(qty, 10) * parseFloat(price);
+
+                    if (!isNaN(subTotal)) {
+
+                        $tblrow.find('.subtot').val(subTotal.toFixed(2));
+                        var grandTotal = 0;
+
+                        $(".subtot").each(function () {
+                            var stval = parseFloat($(this).val());
+                            grandTotal += isNaN(stval) ? 0 : stval;
+                        });
+
+                        $('.grdtot').val(grandTotal.toFixed(2));
+                    }
+                });
+            });
+        });
+    //function calculateSum() {
+
+    //    var sum = 0;
+    //    //iterate through each textboxes and add the values
+    //    $(".txt").each(function () {
+
+    //        //add only if the value is number
+    //        if (this.value.length != 0) {
+    //            alert(this.value);
+    //            sum += parseFloat(this.value);
+    //        }
+
+    //    });
+        //.toFixed() method will roundoff the final sum to 2 decimal places
+        $("#txtSum").val(sum.toFixed(2));
+      
+        //alert(sum)
+    /*}*/
+    </script>
+
