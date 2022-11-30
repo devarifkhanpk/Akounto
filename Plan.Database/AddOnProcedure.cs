@@ -92,9 +92,15 @@ namespace Plan.Database
                     item.Created = Convert.ToDateTime(dr["Created"]);
                 }
 
+                if (dt.Columns.Contains("DurationType") && !Convert.IsDBNull(dr["DurationType"]))
+                {
+                    item.DurationType = Convert.ToString(dr["DurationType"]);
+                }
+
                 response.Data.Add(item);
                
             }
+            
             return response;
         }
         #endregion 

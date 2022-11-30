@@ -11,10 +11,15 @@ namespace Plans.Payment.Entities.Billing
         public int? PlanID { get; set; }
         public int? PlanDurationTypeId { get; set; }
         public int? DurationDays { get; set; }
-        
+
+        public int? Quantity { get; set; }
+
         public string Description { get; set; }
+        public string DurationType { get; set; }
         public decimal? Cost { get; set; }
         public decimal? FirstSubcriptionCode { get; set; }
+        public decimal? SubTotalPrice { get; set; }
+       
         public int? Order { get; set; }
         public bool? IsActive { get; set; }
 
