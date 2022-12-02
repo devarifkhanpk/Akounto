@@ -7,28 +7,40 @@
 @{
     // var addOns = (List<Plans.Payment.Entities.Billing.AddOnModel>)ViewData["resultData"]; // Cast the list
 }
-@using (Html.BeginForm("Summary", "AddOn", FormMethod.Post, new { id="frmAddOn"}))
+@using (Html.BeginForm("Summary", "AddOn", FormMethod.Post, new { id = "frmAddOn" }))
 {
     @Html.AntiForgeryToken()
     <table width="100%" id="tblAddons">
         <thead>
             <tr>
-                <td><p>Plan Detail</p>
-                <td colspan="5"></td>
-
+                <td colspan="4"></td>
             </tr>
             <tr>
-                <td colspan="5"><hr /></td>
-
+                <td colspan="4"><hr /></td>
             </tr>
             <tr>
-                <td width="30%">Select Plan</td>
-                <td width="15%"></td>
-                <td width="20%">Quantity</td>
-                <td width="5%">Unit Price</td>
-                <td width="30%">Cost</td>
+                <td width="55%">Payment Frequency</td>
+                <td width="20%"></td>
+                <td width="15%">Monthly</td>
+                <td width="10%"></td>
+            </tr>
+            <tr>
+                <td>Seleceted Plan</td>
+                <td></td>
+                <td>Startup</td>
+                <td class="planprice">6.00</td>
+            </tr>
+            <tr>
+                <td colspan="4"><hr /></td>
+            </tr>
+            <tr>
+                <td><b>Add-ONs</b></td>
+                <td>Quantity</td>
+                <td>Unit Price</td>
+                <td>Price</td>
             </tr>
         </thead>
+
         <tbody>
             @*@{int i = 0;}*@
             @foreach (var item in Model.Data)
