@@ -18,11 +18,12 @@ namespace Akounto.Billing.Presentation.Controllers.Billing
         [Route("addon/index")]
         public IActionResult Index()
         {
+
             
-            Response<List<AddOnModel>> response = null;
+            Response<AddOnViewModel> response = null;
             try
             {
-                response = BillingAddOn.GetAllAddOns();
+                //response = BillingAddOn.GetAllAddOns();
                 //ViewData["resultData"] = response.Data;
 
                 //AddOnModel item = new AddOnModel();
@@ -32,12 +33,26 @@ namespace Akounto.Billing.Presentation.Controllers.Billing
                 //item.PlanDurationTypeId = 1;
                 //item.PlanID = 1;
                 //item.ID = 1;
-                //response = new Response<List<AddOnModel>>();
-                //response.Data = new List<AddOnModel>();
-                //response.Data.Add(item);
-               // ViewData["resultData"] = response.Data;
+                response = new Response<AddOnViewModel>();
+                response.Data = new AddOnViewModel();
+                response.Data.AddOnItems = BillingAddOn.GetAllAddOns();
+                //response.Data.AddOnItems = new List<AddOnModel>();
+                //response.Data.AddOnItems.Add(item);
+                // ViewData["resultData"] = response.Data;
+                //============Set the value of Payment Plan===============
+                // decimal? PlanCateryGetway=500.69;
+                // response.Data = new AddOnViewModel();
+                response.Data.PlanCategory = new PlanCategoryModel();
+                response.Data.PlanCategory.Cost = Convert.ToDecimal(6.00);
+                response.Data.PlanCategory.PlanName = "Startup";
+                response.Data.PlanCategory.ID = 1;
+                response.Data.PlanCategory.PlanDurationName = "Monthly";
+                
+
+
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -48,31 +63,49 @@ namespace Akounto.Billing.Presentation.Controllers.Billing
         [HttpPost]
         public IActionResult Summary()
         {
-         
-           var req =  HttpContext.Request;
+
+            var req = HttpContext.Request;
             Response<List<AddOnModel>> response = null;
             try
             {
                 response = new Response<List<AddOnModel>>();
                 response.Data = new List<AddOnModel>();
                 AddOnModel item = null;
-                for (int i = 0; i< req.Form.Keys.Count;i++)
+                for (int i = 0; i < req.Form["qty"].Count; i++)
                 {
                     if (req.Form["qty"][i] != null && req.Form["qty"][i] != "")
                     {
                         item = new AddOnModel();
-                        if (req.Form["subtot"][i] != null && req.Form["subtot"][i] != "")
-                            item.SubTotalPrice = Convert.ToDecimal(req.Form["subtot"][i]);
+                        if (req.Form["hdPlanAddonCategoryID"][i] != null && req.Form["hdPlanAddonCategoryID"][i] != "")
+                            item.ID = Convert.ToInt32(req.Form["hdPlanAddonCategoryID"][i]);
+                        if (req.Form["hdPrice"][i] != null && req.Form["hdPrice"][i] != "")
+                            item.Cost = Convert.ToDecimal(req.Form["hdPrice"][i]);
+                        //if (req.Form["subtot"][i] != null && req.Form["subtot"][i] != "")
+                        //    item.SubTotalPrice = Convert.ToDecimal(req.Form["subtot"][i]);
                         if (req.Form["qty"][i] != null && req.Form["qty"][i] != "")
                             item.Quantity = Convert.ToInt32(req.Form["qty"][i]);
                         if (req.Form["desc"][i] != null && req.Form["desc"][i] != "")
                             item.Description = Convert.ToString(req.Form["desc"][i]);
-                        if (req.Form["item.DurationType"][i] != null && req.Form["item.DurationType"][i] != "")
-                            item.DurationType = Convert.ToString(req.Form["item.DurationType"][i]);
+                        if (req.Form["element.DurationType"][i] != null && req.Form["element.DurationType"][i] != "")
+                            item.DurationType = Convert.ToString(req.Form["element.DurationType"][i]);
+                        if (req.Form["hdFirstSubcriptionCost"][i] != null && req.Form["hdFirstSubcriptionCost"][i] != "")
+                            item.FirstSubcriptionCost = Convert.ToDecimal(req.Form["hdFirstSubcriptionCost"][i]);
+                        if (req.Form["hdDurationDays"][i] != null && req.Form["hdDurationDays"][i] != "")
+                            item.DurationDays = Convert.ToInt32(req.Form["hdDurationDays"][i]);
+
                         response.Data.Add(item);
                     }
                 }
-                
+                //if (req.Form["hdPlanCategoryID"] != null && req.Form["hdPlanCategoryID"] != "")
+
+                int? planCategoryID = Convert.ToInt32(req.Form["hdPlanCategoryID"]);
+                decimal addonTotal = Convert.ToDecimal(req.Form["addonTotal"]);
+                decimal grdTotal = Convert.ToDecimal(req.Form["grdtot"]);
+
+
+              int? result =  BillingAddOn.CreateAddOnsSubcription(response.Data,1);
+
+
 
             }
             catch (Exception ex)
@@ -81,6 +114,21 @@ namespace Akounto.Billing.Presentation.Controllers.Billing
             }
             return View(response);
 
+        }
+        [Route("addon/ExpansionPlan")]
+        [HttpPost]
+        public IActionResult ExpansionPlan()
+        {
+            var req = HttpContext.Request;
+            Response<List<AddOnModel>> response = null;
+            response = new Response<List<AddOnModel>>();
+            response.TransactionStatus = new Transaction();
+            response.TransactionStatus.IsSuccess = true;
+
+         
+            
+
+            return View(response);
         }
     }
 }

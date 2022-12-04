@@ -9,6 +9,9 @@ namespace Plans.Payment.Entities.Billing
     {
         public int? ID { get; set; }
         public int? PlanID { get; set; }
+
+       // public int? PlanCategoryID { get; set; }
+
         public int? PlanDurationTypeId { get; set; }
         public int? DurationDays { get; set; }
 
@@ -17,12 +20,19 @@ namespace Plans.Payment.Entities.Billing
         public string Description { get; set; }
         public string DurationType { get; set; }
         public decimal? Cost { get; set; }
-        public decimal? FirstSubcriptionCode { get; set; }
-        public decimal? SubTotalPrice { get; set; }
+        public decimal? FirstSubcriptionCost { get; set; }
+        //public decimal? SubTotalPrice { get; set; }
        
         public int? Order { get; set; }
         public bool? IsActive { get; set; }
 
         public DateTime? Created { get; set; }
+    }
+
+    public class AddOnViewModel
+    {
+        public List<AddOnModel> AddOnItems { get; set; }
+        public PlanCategoryModel PlanCategory { get; set; }
+
     }
 }

@@ -10,9 +10,9 @@ namespace Plan.Database
 {
     public class AddOnProcedure
     {
-        public static Response<List<AddOnModel>> GetAllAddOns(string _connection)
+        public static List<AddOnModel> GetAllAddOns(string _connection)
         {
-            Response<List<AddOnModel>> response = null;
+            List<AddOnModel> addonItems = null;
 
             try
             {
@@ -37,7 +37,7 @@ namespace Plan.Database
 
                     if(dt!=null && dt.Rows.Count>0)
                     {
-                        response = BuildModel(dt);
+                        addonItems = BuildModel(dt);
                     }
 
                 }
@@ -47,15 +47,108 @@ namespace Plan.Database
                 throw ex;
             }
 
-            return response;
+            return addonItems;
+        }
+        public static List<AddOnModel> CreateAddOnsSubcription(string _connection, DataTable addOnDataTable, int companyID)
+        {
+            List<AddOnModel> addonItems = null;
+            Response<LogTransaction> response = null;
+            try
+            {
+
+                using (SqlConnection connection = new SqlConnection(_connection))
+                {
+                    SqlDataAdapter sqlDataAdapter;
+                    DataSet ds = new DataSet();
+
+                    using (SqlCommand command = new SqlCommand())
+                    {
+                        connection.Open();
+                        command.Connection = connection;
+                        command.CommandText = "[dbo].[PlanSubscriptionsAddonAdd]";
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandTimeout = 3600;
+                        command.Parameters.AddWithValue("@CompanyId", companyID);
+                        var tvpParam  = command.Parameters.AddWithValue("@tblPlanCategoriesAddon", addOnDataTable);
+                        tvpParam.SqlDbType = SqlDbType.Structured;
+                        tvpParam.TypeName = "dbo.tblPlanCategoriesAddon";
+
+                        sqlDataAdapter = new SqlDataAdapter(command);
+                        sqlDataAdapter.Fill(ds);
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        response = new Response<LogTransaction>();
+
+                        if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                            DataRow row = ds.Tables[0].Rows[0];
+                            int state = Convert.ToInt32(row["ErrorState"]);
+
+                            if (state == 200)
+                            {
+                                response = new Response<LogTransaction>()
+
+                                {
+                                    Data = new LogTransaction()
+                                    {
+                                        LogId = Convert.ToInt32(row["Id"]),
+                                        LogTransactionId = Convert.ToInt32(row["SubTransactionId"])
+                                    },
+                                    TransactionStatus = new Transaction() { IsSuccess = true }
+                                };
+                            }
+                            else
+                            {
+                                response = new Response<LogTransaction>()
+                                {
+                                    TransactionStatus = new Transaction()
+                                    {
+                                        IsSuccess = false,
+                                        Error = new Error()
+                                        {
+                                            Code = state,
+                                            Description = Convert.ToString(row["ErrorMessage"])
+                                        }
+
+                                    }
+                                };
+                            }
+                        }
+                    }
+                    else if (response == null || (response != null && response.TransactionStatus == null))
+                    {
+                        response = new Response<LogTransaction>()
+                        {
+                            TransactionStatus = new Transaction()
+                            {
+                                IsSuccess = false,
+                                Error = new Error()
+                                {
+                                    Code = 505,
+                                    Description = "Something wrong, plase try after some time"
+                                }
+                            }
+                        };
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return addonItems;
         }
 
         #region Private Method
-        public static Response<List<AddOnModel>> BuildModel(DataTable dt)
+        public static List<AddOnModel> BuildModel(DataTable dt)
         {
             // List<AddOnModel> datalst = new List<AddOnModel>();
-            Response<List<AddOnModel>> response = new Response<List<AddOnModel>>();
-            response.Data = new List<AddOnModel>();
+            List<AddOnModel> addons = new List<AddOnModel>();
+            
             foreach (DataRow  dr in dt.Rows)
             {
                 AddOnModel item = new AddOnModel();
@@ -79,9 +172,9 @@ namespace Plan.Database
                 {
                     item.DurationDays = Convert.ToInt32(dr["DurationDays"]);
                 }
-                if (dt.Columns.Contains("FirstSubscriptionCost") && !Convert.IsDBNull(dr["FirstSubscriptionCost"]))
+                if (dt.Columns.Contains("FirstSubcriptionCost") && !Convert.IsDBNull(dr["FirstSubcriptionCost"]))
                 {
-                    item.FirstSubcriptionCode = Convert.ToDecimal(dr["FirstSubscriptionCost"]);
+                    item.FirstSubcriptionCost = Convert.ToDecimal(dr["FirstSubcriptionCost"]);
                 }
                 if (dt.Columns.Contains("Cost") && !Convert.IsDBNull(dr["Cost"]))
                 {
@@ -97,11 +190,11 @@ namespace Plan.Database
                     item.DurationType = Convert.ToString(dr["DurationType"]);
                 }
 
-                response.Data.Add(item);
+                addons.Add(item);
                
             }
             
-            return response;
+            return addons;
         }
         #endregion 
     }

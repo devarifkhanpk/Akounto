@@ -1,6 +1,6 @@
 ﻿@*@model Plans.Payment.Entities.Billing.AddOnModel*@
 @*model IEnumerable<Plans.Payment.Entities.Billing.AddOnModel>*@
-@model Plans.Infrastructure.Response<List<Plans.Payment.Entities.Billing.AddOnModel>>
+@model Plans.Infrastructure.Response<Plans.Payment.Entities.Billing.AddOnViewModel>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -21,14 +21,18 @@
             <tr>
                 <td width="55%">Payment Frequency</td>
                 <td width="20%"></td>
-                <td width="15%">Monthly</td>
+                <td width="15%">
+                    @Html.Label("lblPlanCategory", Model.Data.PlanCategory.PlanDurationName)
+                    @Html.Hidden("hdPlanCategoryID", Model.Data.PlanCategory.ID)
+                </td>               
                 <td width="10%"></td>
             </tr>
             <tr>
                 <td>Seleceted Plan</td>
                 <td></td>
-                <td>Startup</td>
-                <td class="planprice">6.00</td>
+                <td>@Html.Label("lblPlanName", Model.Data.PlanCategory.PlanName)</td>
+                <td >@Html.Label("lblPlanCategoryCost", Convert.ToString(Model.Data.PlanCategory.Cost), new { @class = "planprice" })</td>
+                
             </tr>
             <tr>
                 <td colspan="4"><hr /></td>
@@ -37,45 +41,59 @@
                 <td><b>Add-ONs</b></td>
                 <td>Quantity</td>
                 <td>Unit Price</td>
-                <td>Price</td>
+                <td>Price</td>                
             </tr>
         </thead>
 
         <tbody>
             @*@{int i = 0;}*@
-            @foreach (var item in Model.Data)
+            @foreach (var element in Model.Data.AddOnItems)
             {
                 <tr>
-                    <td width="30%">@Html.TextBox("desc", item.Description, new { @class = "desc", style = "border: 0px none;" })</td>
-                    <td width="15%"> @Html.HiddenFor(savModel => item.ID)@Html.HiddenFor(savModel => item.DurationType)</td>
-                    <td width="20%">@Html.TextBox("qty", "", new { @class = "qty" })</td>
-                    <td width="5%">
-                        @Html.TextBox("price", item.Cost.ToString(), new { @class = "price", style = "width:50px;border: 0px none;" })
+                    <td>
+                        @Html.TextBox("desc", element.Description, new { @class = "desc", style = "border: 0px none;" })
+                        @Html.Hidden("hdPlanAddonCategoryID", element.ID)
+                        @Html.HiddenFor(savModel => element.DurationType)
+                        @Html.Hidden("hdDurationDays", element.DurationDays)
+                        @Html.Hidden("hdFirstSubcriptionCost", element.FirstSubcriptionCost)                       
+                        DurationDays
+                    </td>                    
+                    <td>@Html.TextBox("qty", "", new { @class = "qty" })</td>
+                    <td>
+                        @Html.Label("price", element.Cost.ToString(), new { @class = "price", style = "width:50px;border: 0px none;" })
+                        @Html.Hidden("hdPrice", element.Cost)
                     </td>
-                    <td width="30%">
+                    <td >
                         @Html.TextBox("subtot", "0", new { @class = "subtot" })
                     </td>
                 </tr>
             }
             <tr>
-                <td colspan="5"><hr /></td>
+                <td colspan="4"><hr /></td>
             </tr>
 
         </tbody>
         <tfoot>
+            <tr style="border-block:solid">                
+                <td ></td>
+                <td colspan="2">Add-on Total</td>
+                <td>
+                    @*<input type="text" class="grdtot" value="" name="" />*@
+                    @Html.TextBox("addonTotal", "", new { @class = "addonTotal" })
+                </td>
+            </tr>
             <tr style="border-block:solid">
-                <td colspan="2"></td>
-                <td width="10%"></td>
-                <td>Amount to be Period</td>
+                <td ></td>
+                <td colspan="2">Amount to be Period</td>                
                 <td>
                     @*<input type="text" class="grdtot" value="" name="" />*@
                     @Html.TextBox("grdtot", "", new { @class = "grdtot" })
                 </td>
             </tr>
+
             <tr style="border-block:solid">
-                <td colspan="2"></td>
-                <td width="10%"></td>
-                <td></td>
+                <td ></td>
+                <td colspan="2"></td>                
                 <td>
                     <input type="submit" value="Continue" />
                 </td>
@@ -119,34 +137,59 @@
     //});
 
     $(function () {
-        $('.desc, .price, .subtot, .grdtot').prop('readonly', true);
+        $('.pnm, .price, .subtot, .grdtot').prop('readonly', true);
         var $tblrows = $("#tblAddons tbody tr");
-
         $tblrows.each(function (index) {
             var $tblrow = $(this);
-
             $tblrow.find('.qty').on('change', function () {
-
-                var qty = $tblrow.find("[name=qty]").val();
-                // var price = $tblrow.find("[name=price]").val();
-                var price = $tblrow.find("[name=price]").val();
+                var qty = $tblrow.find("[name*=qty]").val();
+                var price = parseFloat($tblrow.find("td:eq(2)").text());
                 var subTotal = parseInt(qty, 10) * parseFloat(price);
-
                 if (!isNaN(subTotal)) {
-
                     $tblrow.find('.subtot').val(subTotal.toFixed(2));
                     var grandTotal = 0;
-
+                    var planprice = parseFloat($('.planprice').text());
                     $(".subtot").each(function () {
                         var stval = parseFloat($(this).val());
                         grandTotal += isNaN(stval) ? 0 : stval;
                     });
-
-                    $('.grdtot').val(grandTotal.toFixed(2));
+                    $('.addonTotal').val(grandTotal.toFixed(2));
+                    $('.grdtot').val((grandTotal + planprice).toFixed(2));
                 }
             });
         });
     });
+
+
+    //$(function () {
+    //    $('.desc, .price, .subtot, .grdtot').prop('readonly', true);
+    //    var $tblrows = $("#tblAddons tbody tr");
+
+    //    $tblrows.each(function (index) {
+    //        var $tblrow = $(this);
+
+    //        $tblrow.find('.qty').on('change', function () {
+
+    //            var qty = $tblrow.find("[name=qty]").val();
+    //            // var price = $tblrow.find("[name=price]").val();
+    //            var price = $tblrow.find("[name=price]").val();
+    //            var subTotal = parseInt(qty, 10) * parseFloat(price);
+
+    //            if (!isNaN(subTotal)) {
+
+    //                $tblrow.find('.subtot').val(subTotal.toFixed(2));
+    //                var grandTotal = 0;
+
+    //                $(".subtot").each(function () {
+    //                    var stval = parseFloat($(this).val());
+    //                    grandTotal += isNaN(stval) ? 0 : stval;
+    //                });
+
+    //                $('.grdtot').val(grandTotal.toFixed(2));
+    //            }
+    //        });
+    //    });
+    //});
     //function calculateSum() {
 
     //    var sum = 0;
@@ -161,7 +204,7 @@
 
     //    });
     //.toFixed() method will roundoff the final sum to 2 decimal places
-    $("#txtSum").val(sum.toFixed(2));
+    //$("#txtSum").val(sum.toFixed(2));
 
             //alert(sum)
     /*}*/

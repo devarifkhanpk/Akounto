@@ -4,60 +4,72 @@
 }
 
 <h1>Summary</h1>
-<table width="100%" id="tblAddons">
-    <thead>
-        <tr>
-            <td><p>Order Summary</p>
-            <td colspan="5"></td>
-
-        </tr>
-        <tr>
-            <td colspan="5"><hr /></td>
-
-        </tr>
-        <tr>
-            <td width="30%">Item</td>
-            <td width="15%"></td>
-            <td width="20%">Quantity</td>
-            <td width="5%">Duration</td>
-            <td width="30%">Price</td>
-        </tr>
-    </thead>
-    <tbody>
-        @*@{int i = 0;}*@
-        @foreach (var item in Model.Data)
-        {
+@using (Html.BeginForm("ExpansionPlan", "AddOn", FormMethod.Post, new { id = "frmExpansionPlan" }))
+{
+    <table width="100%" id="tblAddons">
+        <thead>
             <tr>
-                <td width="30%">@item.Description</td>
-                <td width="15%"> </td>
-                <td width="20%">@item.Quantity</td>
-                <td width="5%">
-                 @item.DurationType
-                </td>
-                <td width="30%">                   
-                    @Html.TextBox("subtot", item.SubTotalPrice, new { @class = "subtot", style = "border: 0px none;" })
+                <td><p>Order Summary</p>
+                <td colspan="5"></td>
+
+            </tr>
+            <tr>
+                <td colspan="5"><hr /></td>
+
+            </tr>
+            <tr>
+                <td width="30%">Item</td>
+                <td width="15%"></td>
+                <td width="20%">Quantity</td>
+                <td width="5%">Duration</td>
+                <td width="30%">Price</td>
+            </tr>
+        </thead>
+        <tbody>
+            @*@{int i = 0;}*@
+            @foreach (var item in Model.Data)
+            {
+                <tr>
+                    <td width="30%">
+                        @item.Description                       
+                    </td>
+                    <td width="15%"> </td>
+                    <td width="20%">
+                        @item.Quantity
+                                        @Html.Hidden("hdQuantity", item.Quantity)
+                                    </td>
+                    <td width="5%">
+                        @item.DurationType                       
+                    </td>
+                    <td width="30%">
+                        @Html.TextBox("subtot", item.Quantity*item.Cost, new { @class = "subtot", style = "border: 0px none;" })
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5"><hr /></td>
+            </tr>
+
+        </tbody>
+        <tfoot>
+            <tr style="border-block: solid">
+                <td colspan="4" style="text-align:left;">Net Amount</td>
+                <td>
+                    @Html.TextBox("grdtot", "", new { @class = "grdtot" })
+
                 </td>
             </tr>
-        }
-        <tr>
-            <td colspan="5"><hr /></td>
-        </tr>
+            <tr>
+                <td colspan="5"><hr /></td>
 
-    </tbody>
-    <tfoot>
-        <tr style="border-block: solid">
-            <td colspan="4" style="text-align:left;">Net Amount</td>
-            <td>
-                @Html.TextBox("grdtot", "", new { @class = "grdtot" })
+            </tr>
+            <tr>
+                <td colspan="5"> <input type="submit" value="Proceed" /></td>
 
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5"><hr /></td>
-        </tr>
-
-    </tfoot>
-</table>
+            </tr>
+        </tfoot>
+    </table>
+}
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
@@ -95,7 +107,7 @@
             var $tblrows = $("#tblAddons tbody tr");
 
             $tblrows.each(function (index) {
-               // var $tblrow = $(this);
+                // var $tblrow = $(this);
 
                 // $tblrow.find('.qty').on('change', function () {
 
@@ -136,7 +148,7 @@
     //.toFixed() method will roundoff the final sum to 2 decimal places
     $("#txtSum").val(sum.toFixed(2));
 
-            //alert(sum)
+                //alert(sum)
     /*}*/
 </script>
 
