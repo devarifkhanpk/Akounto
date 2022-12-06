@@ -1,0 +1,46 @@
+﻿@model Plans.Payment.Entities.Billing.InvoiceModel
+
+
+
+    @Html.AntiForgeryToken()
+    <table width="100%" >
+        <thead>
+            <tr>
+                <td colspan="4">Order Summary</td>
+            </tr>
+            
+          
+            <tr>
+                <td><b>Item</b></td>
+                <td>Quantity</td>
+                <td>Duration</td>
+                <td>Price</td>                
+            </tr>
+        </thead>
+
+        <tbody>
+        
+                <tr>
+                    <td>
+                        @Html.Label("item", Model.Description, new { @class = "item", style = "width:50px;border: 0px none;" })
+                    </td>                    
+                    <td>
+                        @Html.Label("qty", Model.Quantity.ToString(), new { @class = "qty", style = "width:50px;border: 0px none;" })
+                    </td>
+                    <td>
+                       @Html.Label("IntervalCount", Model.IntervalCount.ToString(), new { @class = "IntervalCount", style = "width:50px;border: 0px none;" })
+                       @Html.Label("Interval", Model.Interval.ToString(), new { @class = "Interval", style = "width:50px;border: 0px none;" })
+                    </td>
+                    <td >
+                        @Html.Label("Amount", Model.Amount.ToString(), new { @class = "Amount", style = "width:50px;border: 0px none;" })
+                    </td>
+                </tr>
+            
+            <tr>
+                <td colspan="4"><hr /></td>
+            </tr>
+
+        </tbody>
+     
+    </table>
+

@@ -10,6 +10,7 @@ namespace Akounto.Billing.Gateways.StripePayment
             Gateway.Initialize(param);
             //Gateway.Customer = new StripeCustomer();
             Gateway.Subscription = new StripeSubscription();
+            Gateway.Invoice = new InvoiceReceived();
             return Gateway;
         }
     }
