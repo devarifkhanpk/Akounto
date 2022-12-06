@@ -27,6 +27,8 @@ namespace Plans.Payment.Entities.Billing
         public bool? IsActive { get; set; }
 
         public DateTime? Created { get; set; }
+
+        public int? AddonSubscriptionID { get; set; }
     }
 
     public class AddOnViewModel

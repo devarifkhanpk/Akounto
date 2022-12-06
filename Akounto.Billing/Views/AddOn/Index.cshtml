@@ -55,16 +55,17 @@
                         @Html.Hidden("hdPlanAddonCategoryID", element.ID)
                         @Html.HiddenFor(savModel => element.DurationType)
                         @Html.Hidden("hdDurationDays", element.DurationDays)
-                        @Html.Hidden("hdFirstSubcriptionCost", element.FirstSubcriptionCost)                       
-                        DurationDays
+                        @Html.Hidden("hdFirstSubcriptionCost", element.FirstSubcriptionCost)
+                        @Html.Hidden("hdAddonSubscriptionID", element.AddonSubscriptionID)
+                       
                     </td>                    
-                    <td>@Html.TextBox("qty", "", new { @class = "qty" })</td>
+                    <td>@Html.TextBox("qty", element.Quantity, new { @class = "qty" })</td>
                     <td>
                         @Html.Label("price", element.Cost.ToString(), new { @class = "price", style = "width:50px;border: 0px none;" })
                         @Html.Hidden("hdPrice", element.Cost)
                     </td>
                     <td >
-                        @Html.TextBox("subtot", "0", new { @class = "subtot" })
+                        @Html.TextBox("subtot", element.Quantity* element.Cost, new { @class = "subtot" })
                     </td>
                 </tr>
             }
@@ -125,16 +126,22 @@
     //        alert(amount);
     //    });
     //});
-    /*  $(document).ready(function () {*/
-
-    //iterate through each textboxes and add keyup
-    //handler to trigger sum event
-    //$(".txt").each(function () {
-
-    //    $(this).change(function () {
-    //        calculateSum();
-    //    });
-    //});
+      $(document).ready(function () {
+          var $tblrows = $("#tblAddons tbody tr");
+          $tblrows.each(function (index) {                      
+                 
+                      var grandTotal = 0;
+                      var planprice = parseFloat($('.planprice').text());
+                      $(".subtot").each(function () {
+                          var stval = parseFloat($(this).val());
+                          grandTotal += isNaN(stval) ? 0 : stval;
+                      });
+                      $('.addonTotal').val(grandTotal.toFixed(2));
+                      $('.grdtot').val((grandTotal + planprice).toFixed(2));
+                
+             
+          });
+    });
 
     $(function () {
         $('.pnm, .price, .subtot, .grdtot').prop('readonly', true);
@@ -144,6 +151,9 @@
             $tblrow.find('.qty').on('change', function () {
                 var qty = $tblrow.find("[name*=qty]").val();
                 var price = parseFloat($tblrow.find("td:eq(2)").text());
+                if (qty == '') {
+                    qty = 0;
+                }
                 var subTotal = parseInt(qty, 10) * parseFloat(price);
                 if (!isNaN(subTotal)) {
                     $tblrow.find('.subtot').val(subTotal.toFixed(2));

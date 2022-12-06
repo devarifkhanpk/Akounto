@@ -190,6 +190,16 @@ namespace Plan.Database
                     item.DurationType = Convert.ToString(dr["DurationType"]);
                 }
 
+                if (dt.Columns.Contains("AddonSubscriptionID") && !Convert.IsDBNull(dr["AddonSubscriptionID"]))
+                {
+                    item.AddonSubscriptionID = Convert.ToInt32(dr["AddonSubscriptionID"]);
+                }
+
+                if (dt.Columns.Contains("Quantity") && !Convert.IsDBNull(dr["Quantity"]))
+                {
+                    item.Quantity = Convert.ToInt32(dr["Quantity"]);
+                }
+
                 addons.Add(item);
                
             }

@@ -59,6 +59,7 @@ namespace Plans.Business
                 tblAddons.Columns.Add("Cost", typeof(decimal));
                 tblAddons.Columns.Add("ChargeAmount", typeof(decimal));
                 tblAddons.Columns.Add("Quantity", typeof(int));
+                tblAddons.Columns.Add("ID", typeof(int));
 
 
                 foreach (AddOnModel item in addOnCollections)
@@ -66,9 +67,10 @@ namespace Plans.Business
                     DataRow dataRow;
                     dataRow = tblAddons.NewRow();
                     dataRow["PlanCategoryAddonId"] = item.ID;
-                    dataRow["Cost"] = item.Cost;
-                    dataRow["ChargeAmount"] = item.Cost;
-                    dataRow["Quantity"] = item.Quantity;
+                    dataRow["Cost"] = item.Cost??0;
+                    dataRow["ChargeAmount"] = item.Cost??0;
+                    dataRow["Quantity"] = item.Quantity??0;
+                    dataRow["ID"] = item.AddonSubscriptionID??0;
                     tblAddons.Rows.Add(dataRow);
                 }
             }

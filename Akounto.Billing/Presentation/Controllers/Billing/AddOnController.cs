@@ -73,11 +73,14 @@ namespace Akounto.Billing.Presentation.Controllers.Billing
                 AddOnModel item = null;
                 for (int i = 0; i < req.Form["qty"].Count; i++)
                 {
-                    if (req.Form["qty"][i] != null && req.Form["qty"][i] != "")
+                    if ((req.Form["qty"][i] != null && req.Form["qty"][i] != "" && req.Form["qty"][i] != "0"))// || req.Form["hdAddonSubscriptionID"][i] != null && req.Form["hdAddonSubscriptionID"][i] != "")
                     {
+                       
                         item = new AddOnModel();
                         if (req.Form["hdPlanAddonCategoryID"][i] != null && req.Form["hdPlanAddonCategoryID"][i] != "")
                             item.ID = Convert.ToInt32(req.Form["hdPlanAddonCategoryID"][i]);
+                        if (req.Form["hdAddonSubscriptionID"][i] != null && req.Form["hdAddonSubscriptionID"][i] != "")
+                            item.AddonSubscriptionID = Convert.ToInt32(req.Form["hdAddonSubscriptionID"][i]);
                         if (req.Form["hdPrice"][i] != null && req.Form["hdPrice"][i] != "")
                             item.Cost = Convert.ToDecimal(req.Form["hdPrice"][i]);
                         //if (req.Form["subtot"][i] != null && req.Form["subtot"][i] != "")
