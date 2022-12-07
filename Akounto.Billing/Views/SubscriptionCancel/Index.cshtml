@@ -1,0 +1,28 @@
+﻿
+
+    @Html.AntiForgeryToken()
+
+<h1>ExpansionPlan</h1>
+<div width="100%" style="text-align:center">
+   @using (Html.BeginForm("Cancelation", "SubscriptionCancel", FormMethod.Post, new { id = "frmAddOn" }))
+{
+    <table width="75%" style="border:solid; border-block:dashed;color:black">
+        <tr><td colspan="2" style="text-align:center;background:gray"> <p>Help Us to improve</p></td></tr>
+        <tr><td colspan="2" style="text-align:center"><hr /> </td> </tr>
+        <tr><td colspan="2">As our valued customer, it would be great pleasure if you can share the reason to cancel subscription</td></tr>
+        <tr><td colspan="2">
+            <input type="text" id="Description" name="Description" style="width:200px;height:200px" placeholder="Please describe your reason for cancelation. We are to address your concerns."/>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="chkReason" /></td>
+            <td>Downgrade automatically at the end of current billing cycle</td>
+        </tr>
+        <tr>
+          
+            <td><input type="button" value="Cancel" /> </td>
+            <td><input type="submit" value="Confirm Cancelation" /> </td>
+        </tr>
+    </table>
+ }
+</div>
